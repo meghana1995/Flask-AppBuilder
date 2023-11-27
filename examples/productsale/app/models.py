@@ -31,12 +31,12 @@ class Product(Model):
             photoUrl = im.get_url(self.photo)
             return Markup(
                 f'<a href="{productPubViewUrl}" class="thumbnail"><img src="{photoUrl}" '
-                f'alt="Photo" class="img-rounded img-responsive"></a>'
+                'alt="Photo" class="img-rounded img-responsive"></a>'
             )
         else:
             return Markup(
                 f'<a href="{productPubViewUrl}"" class="thumbnail"><img src="//:0" '
-                f'alt="Photo" class="img-responsive">' '</a>'
+                'alt="Photo" class="img-responsive">' '</a>'
             )
 
     def price_label(self):
