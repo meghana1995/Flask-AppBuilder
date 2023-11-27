@@ -1,9 +1,9 @@
 import logging
 from app import db
 from app.models import Inventory, Datacenter, Rack, Item
-import random
 import string
 from datetime import datetime
+import secrets
 
 log = logging.getLogger(__name__)
 
@@ -18,11 +18,11 @@ datacenters = list()
 
 
 def get_random_name(names_list, size=1):
-    return names_list[random.randrange(0, len(names_list))]
+    return names_list[secrets.SystemRandom().randrange(0, len(names_list))]
 
 
 def serial_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    return "".join(random.choice(chars) for _ in range(size))
+    return "".join(secrets.SystemRandom().choice(chars) for _ in range(size))
 
 
 for city in cities:
