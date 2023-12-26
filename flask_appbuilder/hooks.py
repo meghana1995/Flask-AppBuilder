@@ -64,8 +64,7 @@ def wrap_route_handler_with_hooks(
     applicable_hooks = []
     for hook in before_request_hooks:
         only = hook._before_request_only
-        applicable_hook = only is None or handler_name in only
-        if applicable_hook:
+        if applicable_hook := only is None or handler_name in only:
             applicable_hooks.append(hook)
 
     if not applicable_hooks:
@@ -73,8 +72,7 @@ def wrap_route_handler_with_hooks(
 
     def wrapped_handler(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
         for hook in applicable_hooks:
-            result = hook()
-            if result is not None:
+            if (result := hook()) is not None:
                 return result
         return handler(*args, **kwargs)
 

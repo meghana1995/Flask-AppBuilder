@@ -159,8 +159,7 @@ class Filters(object):
     def _get_filters(self, cols: List[str]):
         filters = {}
         for col in cols:
-            _filters = self.filter_converter(self.datamodel).convert(col)
-            if _filters:
+            if _filters := self.filter_converter(self.datamodel).convert(col):
                 filters[col] = _filters
         return filters
 
@@ -196,8 +195,7 @@ class Filters(object):
                 log.warning("Invalid filter")
                 return
             # Get filter class from defaults
-            filter_class = map_args_filter.get(opr, None)
-            if filter_class:
+            if filter_class := map_args_filter.get(opr, None):
                 if col not in self.search_columns:
                     raise InvalidColumnFilterFABException(
                         f"Filter column: {col} not allowed to filter"
@@ -209,8 +207,7 @@ class Filters(object):
                 self.add_filter(col, filter_class, value)
                 continue
             # Get filter class from custom defined filters
-            filters = self._search_filters.get(col)
-            if filters:
+            if filters := self._search_filters.get(col):
                 for filter in filters:
                     if filter.arg_name == opr:
                         self.add_filter(col, filter, value)

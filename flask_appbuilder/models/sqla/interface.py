@@ -773,10 +773,8 @@ class SQLAInterface(BaseInterface):
     """
 
     def get_col_default(self, col_name: str) -> Any:
-        default = getattr(self.list_columns[col_name], "default", None)
-        if default is not None:
-            value = getattr(default, "arg", None)
-            if value is not None:
+        if (default := getattr(self.list_columns[col_name], "default", None)) is not None:
+            if (value := getattr(default, "arg", None)) is not None:
                 if getattr(default, "is_callable", False):
                     return lambda: default.arg(None)
                 else:
@@ -931,10 +929,9 @@ class SQLAInterface(BaseInterface):
         else:
             _filters.add_filter(pk, self.FilterEqual, id)
         query = self.session.query(self.obj)
-        item = self.apply_all(
+        if item := self.apply_all(
             query, _filters, select_columns=select_columns
-        ).one_or_none()
-        if item:
+        ).one_or_none():
             if hasattr(item, self.obj.__name__):
                 return getattr(item, self.obj.__name__)
         return item
@@ -957,8 +954,7 @@ class SQLAInterface(BaseInterface):
         return None
 
     def _get_pk_name(self, model: Type[Model]) -> Optional[Union[List[str], str]]:
-        pk = [pk.name for pk in model.__mapper__.primary_key]
-        if pk:
+        if pk := [pk.name for pk in model.__mapper__.primary_key]:
             return pk if self.is_pk_composite() else pk[0]
         return None
 

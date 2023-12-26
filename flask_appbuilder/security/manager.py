@@ -829,8 +829,7 @@ class BaseSecurityManager(AbstractSecurityManager):
         """
         if username is None or username == "":
             return None
-        user = self.find_user(username=username)
-        if user is None:
+        if (user := self.find_user(username=username)) is None:
             user = self.find_user(email=username)
         if user is None or (not user.is_active):
             # Balance failure and success
@@ -1356,8 +1355,7 @@ class BaseSecurityManager(AbstractSecurityManager):
             :param view_name:
                 the name of the class view (child of BaseView)
         """
-        permissions = self.get_public_permissions()
-        if permissions:
+        if permissions := self.get_public_permissions():
             for i in permissions:
                 if (view_name == i.view_menu.name) and (
                     permission_name == i.permission.name
@@ -1616,8 +1614,7 @@ class BaseSecurityManager(AbstractSecurityManager):
         view_name: str,
         perm_name: str,
     ) -> None:
-        old_pvm = state_transition["add"].get((old_view_name, old_perm_name))
-        if old_pvm:
+        if old_pvm := state_transition["add"].get((old_view_name, old_perm_name)):
             state_transition["add"][(old_view_name, old_perm_name)].add(
                 (view_name, perm_name)
             )

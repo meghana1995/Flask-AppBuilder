@@ -579,12 +579,11 @@ class BaseApi(object):
             except KeyError:
                 override_method_spec = {}
             yaml_doc_string = yaml_utils.load_operations_from_docstring(func.__doc__)
-            yaml_doc_string = yaml.safe_load(
+            if yaml_doc_string := yaml.safe_load(
                 str(yaml_doc_string).replace(
                     "{{self.__class__.__name__}}", self.__class__.__name__
                 )
-            )
-            if yaml_doc_string:
+            ):
                 operation_spec = yaml_doc_string.get(method.lower(), {})
                 # Merge docs spec and override spec
                 operation_spec.update(override_method_spec.get(method.lower(), {}))
@@ -810,8 +809,7 @@ class BaseModelApi(BaseApi):
         """
             Constructor
         """
-        datamodel = kwargs.get("datamodel", None)
-        if datamodel:
+        if datamodel := kwargs.get("datamodel", None):
             self.datamodel = datamodel
         self._init_properties()
         self._init_titles()
@@ -1192,8 +1190,7 @@ class ModelRestApi(BaseModelApi):
         response[API_EDIT_TITLE_RES_KEY] = self.edit_title
 
     def merge_label_columns(self, response, **kwargs):
-        _pruned_select_cols = kwargs.get(API_SELECT_COLUMNS_RIS_KEY, [])
-        if _pruned_select_cols:
+        if _pruned_select_cols := kwargs.get(API_SELECT_COLUMNS_RIS_KEY, []):
             columns = _pruned_select_cols
         else:
             # Send the exact labels for the caller operation
@@ -1212,15 +1209,13 @@ class ModelRestApi(BaseModelApi):
         self.merge_label_columns(response, caller="show", **kwargs)
 
     def merge_show_columns(self, response, **kwargs):
-        _pruned_select_cols = kwargs.get(API_SELECT_COLUMNS_RIS_KEY, [])
-        if _pruned_select_cols:
+        if _pruned_select_cols := kwargs.get(API_SELECT_COLUMNS_RIS_KEY, []):
             response[API_SHOW_COLUMNS_RES_KEY] = _pruned_select_cols
         else:
             response[API_SHOW_COLUMNS_RES_KEY] = self.show_columns
 
     def merge_description_columns(self, response, **kwargs):
-        _pruned_select_cols = kwargs.get(API_SELECT_COLUMNS_RIS_KEY, [])
-        if _pruned_select_cols:
+        if _pruned_select_cols := kwargs.get(API_SELECT_COLUMNS_RIS_KEY, []):
             response[API_DESCRIPTION_COLUMNS_RES_KEY] = self._description_columns_json(
                 _pruned_select_cols
             )
@@ -1231,15 +1226,13 @@ class ModelRestApi(BaseModelApi):
             )
 
     def merge_list_columns(self, response, **kwargs):
-        _pruned_select_cols = kwargs.get(API_SELECT_COLUMNS_RIS_KEY, [])
-        if _pruned_select_cols:
+        if _pruned_select_cols := kwargs.get(API_SELECT_COLUMNS_RIS_KEY, []):
             response[API_LIST_COLUMNS_RES_KEY] = _pruned_select_cols
         else:
             response[API_LIST_COLUMNS_RES_KEY] = self.list_columns
 
     def merge_order_columns(self, response, **kwargs):
-        _pruned_select_cols = kwargs.get(API_SELECT_COLUMNS_RIS_KEY, [])
-        if _pruned_select_cols:
+        if _pruned_select_cols := kwargs.get(API_SELECT_COLUMNS_RIS_KEY, []):
             response[API_ORDER_COLUMNS_RES_KEY] = [
                 order_col
                 for order_col in self.order_columns
@@ -1792,11 +1785,10 @@ class ModelRestApi(BaseModelApi):
     def _sanitize_page_args(self, page, page_size):
         _page = page or 0
         _page_size = page_size or self.page_size
-        max_page_size = self.max_page_size or current_app.config.get(
-            "FAB_API_MAX_PAGE_SIZE"
-        )
         # Accept special -1 to uncap the page size
-        if max_page_size == -1:
+        if (max_page_size := self.max_page_size or current_app.config.get(
+            "FAB_API_MAX_PAGE_SIZE"
+        )) == -1:
             if _page_size == -1:
                 return None, None
             else:
@@ -1883,8 +1875,7 @@ class ModelRestApi(BaseModelApi):
         ret = list()
         for col in cols:
             page = page_size = None
-            col_args = kwargs.get(col, {})
-            if col_args:
+            if col_args := kwargs.get(col, {}):
                 page = col_args.get(API_PAGE_INDEX_RIS_KEY, None)
                 page_size = col_args.get(API_PAGE_SIZE_RIS_KEY, None)
             ret.append(

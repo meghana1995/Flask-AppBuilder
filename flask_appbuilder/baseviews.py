@@ -356,8 +356,7 @@ class BaseView(object):
         """
             Returns the permission name for a method
         """
-        permission = self.method_permission_name.get(method_name)
-        if permission:
+        if permission := self.method_permission_name.get(method_name):
             return permission
         else:
             return getattr(getattr(self, method_name), "_permission_name")
@@ -539,8 +538,7 @@ class BaseModelView(BaseView):
         """
             Constructor
         """
-        datamodel = kwargs.get("datamodel", None)
-        if datamodel:
+        if datamodel := kwargs.get("datamodel", None):
             self.datamodel = datamodel
         self._init_properties()
         self._init_forms()

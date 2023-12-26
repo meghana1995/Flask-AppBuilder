@@ -642,10 +642,9 @@ class ModelView(RestCRUDView):
         """
             Get the permission name of an action name
         """
-        _permission_name = self.method_permission_name.get(
+        if _permission_name := self.method_permission_name.get(
             self.actions.get(name).func.__name__
-        )
-        if _permission_name:
+        ):
             return PERMISSION_PREFIX + _permission_name
         else:
             return name
