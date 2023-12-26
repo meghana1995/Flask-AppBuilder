@@ -153,8 +153,7 @@ class GroupByDateYear(BaseGroupBy):
         ]
 
     def get_group_col(self, item):
-        value = getattr(item, self.column_name)
-        if value:
+        if value := getattr(item, self.column_name):
             return value.year
 
 
@@ -171,8 +170,7 @@ class GroupByDateMonth(BaseGroupBy):
         ]
 
     def get_group_col(self, item):
-        value = getattr(item, self.column_name)
-        if value:
+        if value := getattr(item, self.column_name):
             return value.year, value.month
 
     def get_format_group_col(self, item):

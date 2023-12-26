@@ -259,8 +259,7 @@ def get_file_original_name(name):
         :return:
             Returns the user's original filename removes <UUID>_sep_
     """
-    re_match = re.findall(".*_sep_(.*)", name)
-    if re_match:
+    if re_match := re.findall(".*_sep_(.*)", name):
         return re_match[0]
     else:
         return "Not valid"

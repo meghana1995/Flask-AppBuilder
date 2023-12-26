@@ -176,8 +176,7 @@ class Menu(object):
                 self.find(category).childs.append(new_menu_item)
 
     def add_separator(self, category="", cond=None):
-        menu_item = self.find(category)
-        if menu_item:
+        if menu_item := self.find(category):
             menu_item.childs.append(MenuItem("-", cond=cond))
         else:
             raise Exception(

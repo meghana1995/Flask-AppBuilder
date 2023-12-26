@@ -620,8 +620,7 @@ class AuthOIDView(AuthView):
             if resp.email is None or resp.email == "":
                 flash(as_unicode(self.invalid_login_message), "warning")
                 return redirect(self.appbuilder.get_url_for_login)
-            user = self.appbuilder.sm.auth_user_oid(resp.email)
-            if user is None:
+            if (user := self.appbuilder.sm.auth_user_oid(resp.email)) is None:
                 flash(as_unicode(self.invalid_login_message), "warning")
                 return redirect(self.appbuilder.get_url_for_login)
             remember_me = False
@@ -692,8 +691,7 @@ class AuthOAuthView(AuthView):
     @expose("/oauth-authorized/<provider>")
     def oauth_authorized(self, provider):
         log.debug("Authorized init")
-        resp = self.appbuilder.sm.oauth_remotes[provider].authorize_access_token()
-        if resp is None:
+        if (resp := self.appbuilder.sm.oauth_remotes[provider].authorize_access_token()) is None:
             flash(u"You denied the request to sign in.", "warning")
             return redirect(self.appbuilder.get_url_for_login)
         log.debug("OAUTH Authorized resp: {0}".format(resp))

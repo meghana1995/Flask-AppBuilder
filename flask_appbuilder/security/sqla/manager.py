@@ -240,8 +240,7 @@ class SecurityManager(BaseSecurityManager):
     """
 
     def add_role(self, name: str) -> Optional[Role]:
-        role = self.find_role(name)
-        if role is None:
+        if (role := self.find_role(name)) is None:
             try:
                 role = self.role_model()
                 role.name = name
@@ -284,8 +283,7 @@ class SecurityManager(BaseSecurityManager):
         )
 
     def get_public_permissions(self):
-        role = self.get_public_role()
-        if role:
+        if role := self.get_public_role():
             return role.permissions
         return []
 
@@ -382,8 +380,7 @@ class SecurityManager(BaseSecurityManager):
             :param name:
                 name of the permission: 'can_add','can_edit' etc...
         """
-        perm = self.find_permission(name)
-        if perm is None:
+        if (perm := self.find_permission(name)) is None:
             try:
                 perm = self.permission_model()
                 perm.name = name
@@ -407,12 +404,11 @@ class SecurityManager(BaseSecurityManager):
             log.warning(c.LOGMSG_WAR_SEC_DEL_PERMISSION.format(name))
             return False
         try:
-            pvms = (
+            if pvms := (
                 self.get_session.query(self.permissionview_model)
                 .filter(self.permissionview_model.permission == perm)
                 .all()
-            )
-            if pvms:
+            ):
                 log.warning(c.LOGMSG_WAR_SEC_DEL_PERM_PVM.format(perm, pvms))
                 return False
             self.get_session.delete(perm)
@@ -448,8 +444,7 @@ class SecurityManager(BaseSecurityManager):
             param name:
                 name of the view menu to add
         """
-        view_menu = self.find_view_menu(name)
-        if view_menu is None:
+        if (view_menu := self.find_view_menu(name)) is None:
             try:
                 view_menu = self.viewmenu_model()
                 view_menu.name = name
@@ -473,12 +468,11 @@ class SecurityManager(BaseSecurityManager):
             log.warning(c.LOGMSG_WAR_SEC_DEL_VIEWMENU.format(name))
             return False
         try:
-            pvms = (
+            if pvms := (
                 self.get_session.query(self.permissionview_model)
                 .filter(self.permissionview_model.view_menu == view_menu)
                 .all()
-            )
-            if pvms:
+            ):
                 log.warning(c.LOGMSG_WAR_SEC_DEL_VIEWMENU_PVM.format(view_menu, pvms))
                 return False
             self.get_session.delete(view_menu)
@@ -532,8 +526,7 @@ class SecurityManager(BaseSecurityManager):
         """
         if not (permission_name and view_menu_name):
             return None
-        pv = self.find_permission_view_menu(permission_name, view_menu_name)
-        if pv:
+        if pv := self.find_permission_view_menu(permission_name, view_menu_name):
             return pv
         vm = self.add_view_menu(view_menu_name)
         perm = self.add_permission(permission_name)
@@ -554,12 +547,11 @@ class SecurityManager(BaseSecurityManager):
         pv = self.find_permission_view_menu(permission_name, view_menu_name)
         if not pv:
             return
-        roles_pvs = (
+        if roles_pvs := (
             self.get_session.query(self.role_model)
             .filter(self.role_model.permissions.contains(pv))
             .first()
-        )
-        if roles_pvs:
+        ):
             log.warning(
                 c.LOGMSG_WAR_SEC_DEL_PERMVIEW.format(
                     view_menu_name, permission_name, roles_pvs

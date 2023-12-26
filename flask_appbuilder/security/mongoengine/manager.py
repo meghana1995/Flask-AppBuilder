@@ -158,8 +158,7 @@ class SecurityManager(BaseSecurityManager):
     """
 
     def add_role(self, name):
-        role = self.find_role(name)
-        if role is None:
+        if (role := self.find_role(name)) is None:
             try:
                 role = self.role_model(name=name)
                 role.save()
@@ -198,8 +197,7 @@ class SecurityManager(BaseSecurityManager):
     ) -> bool:
         for role_id in role_ids:
             role = self.role_model.objects(id=role_id).first()
-            permissions = role.permissions
-            if permissions:
+            if permissions := role.permissions:
                 for permission in permissions:
                     if (view_name == permission.view_menu.name) and (
                         permission_name == permission.permission.name
@@ -214,8 +212,7 @@ class SecurityManager(BaseSecurityManager):
             :param name:
                 name of the permission: 'can_add','can_edit' etc...
         """
-        perm = self.find_permission(name)
-        if perm is None:
+        if (perm := self.find_permission(name)) is None:
             try:
                 perm = self.permission_model(name=name)
                 perm.save()
@@ -231,8 +228,7 @@ class SecurityManager(BaseSecurityManager):
             :param name:
                 name of the permission: 'can_add','can_edit' etc...
         """
-        perm = self.find_permission(name)
-        if perm:
+        if perm := self.find_permission(name):
             try:
                 perm.delete()
             except Exception as e:
@@ -259,8 +255,7 @@ class SecurityManager(BaseSecurityManager):
             param name:
                 name of the view menu to add
         """
-        view_menu = self.find_view_menu(name)
-        if view_menu is None:
+        if (view_menu := self.find_view_menu(name)) is None:
             try:
                 view_menu = self.viewmenu_model(name=name)
                 view_menu.save()
@@ -276,8 +271,7 @@ class SecurityManager(BaseSecurityManager):
             :param name:
                 name of the ViewMenu
         """
-        obj = self.find_view_menu(name)
-        if obj:
+        if obj := self.find_view_menu(name):
             try:
                 obj.delete()
             except Exception as e:
@@ -320,8 +314,7 @@ class SecurityManager(BaseSecurityManager):
         """
         if not (permission_name and view_menu_name):
             return None
-        pv = self.find_permission_view_menu(permission_name, view_menu_name)
-        if pv:
+        if pv := self.find_permission_view_menu(permission_name, view_menu_name):
             return pv
         vm = self.add_view_menu(view_menu_name)
         perm = self.add_permission(permission_name)

@@ -156,9 +156,8 @@ class FilterGreater(BaseFilter):
 
     def apply(self, query, value):
         query, field = get_field_setup_query(query, self.model, self.column_name)
-        value = set_value_to_type(self.datamodel, self.column_name, value)
 
-        if value is None:
+        if (value := set_value_to_type(self.datamodel, self.column_name, value)) is None:
             return query
 
         return query.filter(field > value)
@@ -170,9 +169,8 @@ class FilterSmaller(BaseFilter):
 
     def apply(self, query, value):
         query, field = get_field_setup_query(query, self.model, self.column_name)
-        value = set_value_to_type(self.datamodel, self.column_name, value)
 
-        if value is None:
+        if (value := set_value_to_type(self.datamodel, self.column_name, value)) is None:
             return query
 
         return query.filter(field < value)
@@ -207,9 +205,8 @@ class FilterRelationManyToManyEqual(FilterRelation):
         Get object by column_name and value_item, then apply filter if object exists
         Query with new filter applied
         """
-        rel_obj = self.datamodel.get_related_obj(self.column_name, value_item)
 
-        if rel_obj:
+        if rel_obj := self.datamodel.get_related_obj(self.column_name, value_item):
             return query.filter(field.contains(rel_obj))
         else:
             log.error(

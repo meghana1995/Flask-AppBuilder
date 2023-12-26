@@ -59,21 +59,18 @@ def create_admin(username, firstname, lastname, email, password):
             fg="green",
         )
     )
-    user = current_app.appbuilder.sm.find_user(username=username)
-    if user:
+    if user := current_app.appbuilder.sm.find_user(username=username):
         click.echo(click.style(f"Error! User already exists {username}", fg="red"))
         return
-    user = current_app.appbuilder.sm.find_user(email=email)
-    if user:
+    if user := current_app.appbuilder.sm.find_user(email=email):
         click.echo(click.style(f"Error! User already exists {username}", fg="red"))
         return
     role_admin = current_app.appbuilder.sm.find_role(
         current_app.appbuilder.sm.auth_role_admin
     )
-    user = current_app.appbuilder.sm.add_user(
+    if user := current_app.appbuilder.sm.add_user(
         username, firstname, lastname, email, role_admin, password
-    )
-    if user:
+    ):
         click.echo(click.style("Admin User {0} created.".format(username), fg="green"))
     else:
         click.echo(click.style("No user created an error occured", fg="red"))
@@ -91,22 +88,19 @@ def create_user(role, username, firstname, lastname, email, password):
     """
         Create a user
     """
-    user = current_app.appbuilder.sm.find_user(username=username)
-    if user:
+    if user := current_app.appbuilder.sm.find_user(username=username):
         click.echo(click.style(f"Error! User already exists {username}", fg="red"))
         return
-    user = current_app.appbuilder.sm.find_user(email=email)
-    if user:
+    if user := current_app.appbuilder.sm.find_user(email=email):
         click.echo(click.style(f"Error! User already exists {username}", fg="red"))
         return
     role_object = current_app.appbuilder.sm.find_role(role)
     if not role_object:
         click.echo(click.style(f"Error! Role not found {role}", fg="red"))
         return
-    user = current_app.appbuilder.sm.add_user(
+    if user := current_app.appbuilder.sm.add_user(
         username, firstname, lastname, email, role_object, password
-    )
-    if user:
+    ):
         click.echo(click.style("User {0} created.".format(username), fg="green"))
     else:
         click.echo(click.style("Error! No user created", fg="red"))

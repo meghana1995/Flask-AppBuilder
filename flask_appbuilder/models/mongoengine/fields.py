@@ -37,8 +37,7 @@ class MongoFileField(fields.FileField):
         return super(MongoFileField, self).process(formdata, data)
 
     def populate_obj(self, obj, name):
-        field = getattr(obj, name, None)
-        if field is not None:
+        if (field := getattr(obj, name, None)) is not None:
             # If field should be deleted, clean it up
             if self._should_delete:
                 field.delete()

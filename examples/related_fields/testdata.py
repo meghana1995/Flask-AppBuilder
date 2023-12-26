@@ -69,8 +69,7 @@ for i in range(1, 1000):
     )
     c.personal_phone = random.randrange(1111111, 9999999)
     c.personal_celphone = random.randrange(1111111, 9999999)
-    group = random.randrange(0, 2)
-    if group == 0:
+    if (group := random.randrange(0, 2)) == 0:
         sub_group = random.randrange(0, 2)
     else:
         sub_group = random.randrange(1, 4)

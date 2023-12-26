@@ -147,8 +147,7 @@ class QuerySelectField(SelectFieldBase):
                 self._formdata = valuelist[0]
 
     def pre_validate(self, form):
-        data = self.data
-        if data is not None:
+        if (data := self.data) is not None:
             for pk, obj in self._get_object_list():
                 if data == obj:
                     break
@@ -184,8 +183,7 @@ class QuerySelectMultipleField(QuerySelectField):
         self._invalid_formdata = False
 
     def _get_data(self):
-        formdata = self._formdata
-        if formdata is not None:
+        if (formdata := self._formdata) is not None:
             data = []
             for pk, obj in self._get_object_list():
                 if not formdata:

@@ -140,10 +140,9 @@ def create_admin(app, appbuilder, username, firstname, lastname, email, password
         )
     )
     role_admin = _appbuilder.sm.find_role(_appbuilder.sm.auth_role_admin)
-    user = _appbuilder.sm.add_user(
+    if user := _appbuilder.sm.add_user(
         username, firstname, lastname, email, role_admin, password
-    )
-    if user:
+    ):
         click.echo(click.style("Admin User {0} created.".format(username), fg="green"))
     else:
         click.echo(click.style("No user created an error occured", fg="red"))
@@ -164,10 +163,9 @@ def create_user(app, appbuilder, role, username, firstname, lastname, email, pas
     """
     _appbuilder = import_application(app, appbuilder)
     role_object = _appbuilder.sm.find_role(role)
-    user = _appbuilder.sm.add_user(
+    if user := _appbuilder.sm.add_user(
         username, firstname, lastname, email, role_object, password
-    )
-    if user:
+    ):
         click.echo(click.style("User {0} created.".format(username), fg="green"))
     else:
         click.echo(click.style("Error! No user created", fg="red"))

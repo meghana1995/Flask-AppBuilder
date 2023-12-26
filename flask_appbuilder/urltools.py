@@ -51,8 +51,7 @@ def get_page_args():
     """
     pages = {}
     for arg in request.args:
-        re_match = re.findall("page_(.*)", arg)
-        if re_match:
+        if re_match := re.findall("page_(.*)", arg):
             pages[re_match[0]] = int(request.args.get(arg))
     return pages
 
@@ -67,8 +66,7 @@ def get_page_size_args():
     """
     page_sizes = {}
     for arg in request.args:
-        re_match = re.findall("psize_(.*)", arg)
-        if re_match:
+        if re_match := re.findall("psize_(.*)", arg):
             page_sizes[re_match[0]] = int(request.args.get(arg))
     return page_sizes
 
@@ -83,8 +81,7 @@ def get_order_args():
     """
     orders = {}
     for arg in request.args:
-        re_match = re.findall("_oc_(.*)", arg)
-        if re_match:
+        if re_match := re.findall("_oc_(.*)", arg):
             order_direction = request.args.get("_od_" + re_match[0])
             if order_direction in ("asc", "desc"):
                 orders[re_match[0]] = (request.args.get(arg), order_direction)
@@ -94,8 +91,7 @@ def get_order_args():
 def get_filter_args(filters):
     filters.clear_filters()
     for arg in request.args:
-        re_match = re.findall("_flt_(\d)_(.*)", arg)
-        if re_match:
+        if re_match := re.findall("_flt_(\d)_(.*)", arg):
             filters.add_filter_index(
                 re_match[0][1], int(re_match[0][0]), request.args.get(arg)
             )

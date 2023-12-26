@@ -105,10 +105,9 @@ class BaseRegisterUser(PublicFormView):
 
         :rtype : RegisterUser
         """
-        register_user = self.appbuilder.sm.add_register_user(
+        if register_user := self.appbuilder.sm.add_register_user(
             username, first_name, last_name, email, password
-        )
-        if register_user:
+        ):
             if self.send_email(register_user):
                 flash(as_unicode(self.message), "info")
                 return register_user
@@ -205,8 +204,7 @@ class RegisterUserOIDView(BaseRegisterUser):
             return self.appbuilder.sm.oid.try_login(
                 form.openid.data, ask_for=["email", "fullname"]
             )
-        resp = session.pop("oid_resp", None)
-        if resp:
+        if resp := session.pop("oid_resp", None):
             self._init_vars()
             form = self.form.refresh()
             self.form_get(form)

@@ -402,8 +402,7 @@ class PSSession(GenericSession):
     def add_object(self, line):
         import re
 
-        group = re.findall(self.regexp, line)
-        if group:
+        if group := re.findall(self.regexp, line):
             model = PSModel()
             model.UID = group[0][0]
             model.PID = int(group[0][1])

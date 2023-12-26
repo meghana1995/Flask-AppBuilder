@@ -11,8 +11,7 @@ from flask_appbuilder.security.decorators import has_access
 
 def resolver(schema):
     schema_cls = resolve_schema_cls(schema)
-    name = schema_cls.__name__
-    if name == "MetaSchema":
+    if (name := schema_cls.__name__) == "MetaSchema":
         if hasattr(schema_cls, "Meta"):
             return (
                 f"{schema_cls.Meta.parent_schema_name}.{schema_cls.Meta.model.__name__}"

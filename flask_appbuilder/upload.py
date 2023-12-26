@@ -166,8 +166,7 @@ class FileUploadField(fields.TextField):
         return super(FileUploadField, self).process(formdata, data)
 
     def populate_obj(self, obj, name):
-        field = getattr(obj, name, None)
-        if field:
+        if field := getattr(obj, name, None):
             # If field should be deleted, clean it up
             if self._should_delete:
                 self.process_on_delete(obj)
